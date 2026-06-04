@@ -26,7 +26,22 @@ const Sidebar = ({ route }) => {
       <Box sx={{ display: "flex", flexDirection: "column", justifyContent: "space-between", height: "100%", overflow: "auto", }}>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 1.5, alignItems: "center", my: 3, }}>
           {route.map((item) => (
-            <Stack direction="row" alignItems="center" sx={{ backgroundColor: "#ff8e29", px: 1, py: 0.5, borderRadius: 3, width: "100%" }} key={item.name}>
+            <Stack
+              key={item?.name}
+              spacing={2}
+              direction="row"
+              alignItems="center"
+              sx={{
+                width: "100%",
+                backgroundColor: "#ff8e29",
+                px: 1,
+                py: 0.5,
+                borderRadius: 3,
+                cursor: "pointer",
+                transition: "all 0.2s ease",
+                "&:hover": { backgroundColor: "#ffb36b", },
+              }}
+            >
               <Box sx={{ display: "flex", flexDirection: "column", p: 1, alignItems: "center", }}>
                 {item?.icon}
               </Box>
@@ -39,9 +54,22 @@ const Sidebar = ({ route }) => {
           ))}
         </Box>
 
-        <Stack direction="row" alignItems="center" sx={{ backgroundColor: "#ff8e29", px: 1, py: 0.5, mt: 6, borderRadius: 3, }}>
+        <Stack
+          direction="row"
+          alignItems="center"
+          sx={{
+            backgroundColor: "#ff8e29",
+            px: 1,
+            py: 0.5,
+            mt: 6,
+            borderRadius: 3,
+            cursor: "pointer",
+            transition: "all 0.2s ease",
+            "&:hover": { backgroundColor: "#ffb36b", },
+          }}
+        >
           <Box sx={{ display: "flex", flexDirection: "column", p: 0.8, alignItems: "center" }}>
-            <Logout sx={{ height: "22px", width: "20px" }} />
+            <Logout sx={{ height: "22px", width: "20px", color: "#ffffff" }} />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
             <Typography variant="body1" sx={{ color: "#ffffff", fontWeight: "500", fontFamily: "cursive", }}>

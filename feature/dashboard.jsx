@@ -91,11 +91,13 @@ const options = [
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item size={{ xs: 12 }}>
           <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py:3, mt: 2, color: "#070707" }}>
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+            <Grid container sx={{display: 'flex', justifyContent: 'space-between', mb:2}} alignItems="center" >
+              <Box sx={{  mt: { xs: 2, sm: 0 } }}>
               <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', fontFamily: "cursive" }}>
                 Sales Overview
               </Typography>
-
+              </Box>
+              <Box sx={{ minWidth: 120, mt: { xs: 2, sm: 0 } }}>
               <CustomSelect
                 options={options}
                 labelKey="label"
@@ -104,7 +106,8 @@ const options = [
                 onChange={(e) => setSelectedRange(e.target.value)}
                 label="Time Range"
               />
-            </Box>
+              </Box>
+              </Grid>
             <AreaChart
               style={{ width: '100%',  maxHeight: '45vh', aspectRatio: 1.618 }}
               responsive
