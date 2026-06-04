@@ -9,7 +9,7 @@ import Sidebar from "../Sidebar";
 import { Box, Stack, Drawer, useTheme, useMediaQuery } from "@mui/material";
 import { Group, Paid, DashboardCustomize } from "@mui/icons-material";
 
-const authRoutes = ["/login", "/register"];
+const authRoutes = ["/login", "/sign-up", "/forgot-password", "/reset-password"];
 
 const route = [
   { name: "Dashboard", path: "/dashboard", icon: <DashboardCustomize sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },

@@ -8,18 +8,28 @@ import { Box, Typography, Link as MuiLink } from "@mui/material";
 import CustomInput from "@/components/common/CustomInput";
 import CustomButton from "@/components/common/CustomButton";
 import AuthCardContainer from "@/components/AuthContainerCard";
+import CustomSelect from "@/components/common/CustomSelect";
 
 const SignUpForm = () => {
+
+  const genderOptions = [
+    { label: "Male", value: "male" },
+    { label: " Female", value: "female" },
+    { label: "Other", value: "other" },
+  ];
+
   const formik = useFormik({
     initialValues: {
       name: "",
       phone: "",
+      gender: "",
       email: "",
       password: ""
     },
     validationSchema: yup.object({
       name: yup.string().min(2, "Name must be at least 2 characters").required("Name is required"),
       phone: yup.string().matches(/^[0-9]{10}$/, "Invalid phone number").required("Phone number is required"),
+      gender: yup.string().required("Gender is required"),
       email: yup.string().email("Invalid email address").required("Email is required"),
       password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required")
     }),
@@ -49,6 +59,19 @@ const SignUpForm = () => {
         onChange={formik.handleChange}
         value={formik.values.phone}
         helperText={formik?.touched?.phone && formik?.errors?.phone ? formik?.errors?.phone : ""}
+      />
+      {console.log("genderOptions :", genderOptions)}
+      <CustomSelect
+        name="gender"
+        outerLabel="Gender"
+        size="small"
+        labelKey="label"
+        valueKey="value"
+        fullWidth
+        options={genderOptions}
+        onChange={formik.handleChange}
+        value={formik.values.gender}
+        helperText={formik?.touched?.gender && formik?.errors?.gender ? formik?.errors?.gender : ""}
       />
       <CustomInput
         name="email"

@@ -8,7 +8,7 @@ import { Box, Grid, Typography, Skeleton } from "@mui/material";
 const AuthContainerCard = ({ title, children, imageUrl }) => {
   return (
     <Box sx={{ minHeight: '100vh', display: 'flex', color: "black", bgcolor: 'background.default', alignItems: 'center', justifyContent: 'center' }}>
-      <Grid container spacing={0} sx={{ maxWidth: 850, minHeight:"560px", width: '100%', borderRadius: 2, boxShadow: 3 }}>
+      <Grid container spacing={0} sx={{ maxWidth: 850, minHeight: "560px", width: '100%', borderRadius: 2, boxShadow: 3 }}>
         <Grid item size={{ xs: 12, md: 6 }} sx={{ p: 4, gap: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
           <Grid sx={{ display: "flex", justifyContent: "center" }}>
             <Typography sx={{ fontSize: "25px", fontWeight: "700" }}>
@@ -50,8 +50,10 @@ const AuthContainerCard = ({ title, children, imageUrl }) => {
                 src={imageUrl}
                 alt="Login Image"
                 fill
+                quality={100}
                 style={{
                   objectFit: "cover",
+                  objectPosition: "center left",
                   borderTopRightRadius: "8px",
                   borderBottomRightRadius: "8px",
                 }}

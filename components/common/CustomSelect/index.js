@@ -1,14 +1,25 @@
-import { FormControl, InputLabel, MenuItem, Select } from "@mui/material";
+import { FormControl, InputLabel, MenuItem, Select, Box } from "@mui/material";
 
-const CustomSelect = ({ options, value, onChange, label, labelKey, valueKey, name, fullWidth, variant = "outlined", size = "small", }) => {
+const CustomSelect = ({outerLabel,  options, value, onChange, label, labelKey, valueKey, name, fullWidth, variant = "outlined", size = "small", }) => {
   return (
-    <FormControl fullWidth={fullWidth} variant={variant} size={size} sx={{ minWidth: 220 }}>
+    <Box sx={{mt:1}}>
+    {outerLabel && (
+            <Box sx={{ display: "flex", justifyContent: "space-between", px: 1.5, mb: 1 }}>
+              <InputLabel htmlFor={name}>{outerLabel}</InputLabel>
+            </Box>
+          )}
+    <FormControl fullWidth={fullWidth} variant={variant} size={size} sx={{ minWidth: 220, }}>
       <InputLabel id="demo-simple-select-label">{label}</InputLabel>
       <Select
         name={name}
         value={value}
         label={label}
         onChange={onChange}
+        sx={{
+          '& .MuiOutlinedInput-notchedOutline': {
+            borderRadius: size === 'small' ? '20px' : '30px',
+          },
+        }}
       >
         {options?.map((option) => (
           <MenuItem key={option[valueKey]} value={option[valueKey]}>
@@ -17,6 +28,7 @@ const CustomSelect = ({ options, value, onChange, label, labelKey, valueKey, nam
         ))}
       </Select>
     </FormControl>
+    </Box>
   );
 }
 

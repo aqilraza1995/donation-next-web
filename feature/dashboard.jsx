@@ -11,7 +11,7 @@ import { Area, AreaChart, Tooltip, XAxis, YAxis } from 'recharts';
 
 const Dashboard = () => {
 
-const [selectedRange, setSelectedRange] = useState('7d');
+  const [selectedRange, setSelectedRange] = useState('7d');
 
   const data = [
     {
@@ -58,11 +58,11 @@ const [selectedRange, setSelectedRange] = useState('7d');
     },
   ];
 
-const options = [
-  { label: 'Last 7 days', value: '7d' },
-  { label: 'Last 30 days', value: '30d' },
-  { label: 'Last 90 days', value: '90d' }
-];
+  const options = [
+    { label: 'Last 7 days', value: '7d' },
+    { label: 'Last 30 days', value: '30d' },
+    { label: 'Last 90 days', value: '90d' }
+  ];
 
   return (
     <>
@@ -90,26 +90,26 @@ const options = [
       </Grid>
       <Grid container spacing={2} sx={{ mt: 2 }}>
         <Grid item size={{ xs: 12 }}>
-          <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py:3, mt: 2, color: "#070707" }}>
-            <Grid container sx={{display: 'flex', justifyContent: 'space-between', mb:2}} alignItems="center" >
-              <Box sx={{  mt: { xs: 2, sm: 0 } }}>
-              <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', fontFamily: "cursive" }}>
-                Sales Overview
-              </Typography>
+          <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py: 3, mt: 2, color: "#070707" }}>
+            <Grid container sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }} alignItems="center" >
+              <Box sx={{ mt: { xs: 2, sm: 0 } }}>
+                <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', fontFamily: "cursive" }}>
+                  Sales Overview
+                </Typography>
               </Box>
               <Box sx={{ minWidth: 120, mt: { xs: 2, sm: 0 } }}>
-              <CustomSelect
-                options={options}
-                labelKey="label"
-                valueKey="value"
-                value={selectedRange}
-                onChange={(e) => setSelectedRange(e.target.value)}
-                label="Time Range"
-              />
+                <CustomSelect
+                  options={options}
+                  labelKey="label"
+                  valueKey="value"
+                  value={selectedRange}
+                  onChange={(e) => setSelectedRange(e.target.value)}
+                  label="Time Range"
+                />
               </Box>
-              </Grid>
+            </Grid>
             <AreaChart
-              style={{ width: '100%',  maxHeight: '45vh', aspectRatio: 1.618 }}
+              style={{ width: '100%', maxHeight: '45vh', aspectRatio: 1.618 }}
               responsive
               data={data}
               onContextMenu={(_, e) => e.preventDefault()}
