@@ -10,11 +10,11 @@ const Header = ({ handleDrawerOpen }) => {
       <Box>
         {isMobile ?
           <IconButton onClick={handleDrawerOpen} sx={{ mr: 2 }}><Menu /></IconButton>
-          : <Typography variant="h5" sx={{ fontSize: "20px", fontWeight: "500", fontFamily: "cursive" }}>Dashbaord</Typography>
+          : <Typography variant="h5" sx={{ fontSize: "20px", fontWeight: "500",  }}>Dashbaord</Typography>
         }
       </Box>
       <Stack direction={"row"} sx={{ gap: 4 }}>
-        <Typography variant="body1" sx={{ fontFamily: "cursive" }}>Aqil Raza</Typography>
+        <Typography variant="body1">Aqil Raza</Typography>
         <Logout sx={{ height: "20px", width: "20px", mt: 0.5 }} />
       </Stack>
     </Box>

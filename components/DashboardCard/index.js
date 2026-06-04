@@ -9,8 +9,8 @@ const DashbaordCard = ({ iconBackground = "#27d095", icon }) => {
           {icon || <People sx={{ height: "32px", width: "32px", color: "#fff" }} />}
         </Box>
         <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, justifyContent: "center" }}>
-          <Typography variant="h5" sx={{ fontSize: "20px", fontWeight: "400", fontFamily: "cursive" }}>Total Users</Typography>
-          <Typography variant="h6" sx={{ fontSize: "16px", fontWeight: "400", fontFamily: "cursive" }}>1000</Typography>
+          <Typography variant="h5" sx={{ fontSize: "20px", fontWeight: "400", }}>Total Users</Typography>
+          <Typography variant="h6" sx={{ fontSize: "16px", fontWeight: "400",  }}>1000</Typography>
         </Box>
       </Stack>
     </Paper>

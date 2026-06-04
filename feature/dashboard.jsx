@@ -93,7 +93,7 @@ const Dashboard = () => {
           <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py: 3, mt: 2, color: "#070707" }}>
             <Grid container sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }} alignItems="center" >
               <Box sx={{ mt: { xs: 2, sm: 0 } }}>
-                <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', fontFamily: "cursive" }}>
+                <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold'}}>
                   Sales Overview
                 </Typography>
               </Box>

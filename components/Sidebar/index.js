@@ -18,7 +18,7 @@ const Sidebar = ({ route }) => {
     >
 
       <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, alignItems: "center", my: 3 }}>
-        <Typography variant="h6" sx={{ color: "#070707", fontWeight: "600", fontFamily: "cursive", }}>
+        <Typography variant="h6" sx={{ color: "#070707", fontWeight: "600" }}>
           Donation
         </Typography>
       </Box>
@@ -28,7 +28,6 @@ const Sidebar = ({ route }) => {
           {route.map((item) => (
             <Stack
               key={item?.name}
-              spacing={2}
               direction="row"
               alignItems="center"
               sx={{
@@ -46,7 +45,7 @@ const Sidebar = ({ route }) => {
                 {item?.icon}
               </Box>
               <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-                <Typography variant="body1" sx={{ color: "#ffffff", fontWeight: "500", fontFamily: "cursive", }}>
+                <Typography variant="body1" sx={{ color: "#ffffff", fontWeight: "500" }}>
                   {item.name}
                 </Typography>
               </Box>
@@ -72,7 +71,7 @@ const Sidebar = ({ route }) => {
             <Logout sx={{ height: "22px", width: "20px", color: "#ffffff" }} />
           </Box>
           <Box sx={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
-            <Typography variant="body1" sx={{ color: "#ffffff", fontWeight: "500", fontFamily: "cursive", }}>
+            <Typography variant="body1" sx={{ color: "#ffffff", fontWeight: "500" }}>
               Log out
             </Typography>
           </Box>

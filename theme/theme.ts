@@ -3,15 +3,13 @@
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
-  typography: {
-    fontFamily: "var(--font-ibm)",
-  },
 
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          fontFamily: "var(--font-ibm)",
+          // fontFamily: "var(--font-ibm)",
+          fontFamily: "cursive",
           textTransform: "none",
         },
       },
@@ -20,7 +18,8 @@ const theme = createTheme({
     MuiTypography: {
       styleOverrides: {
         root: {
-          fontFamily: "var(--font-ibm)",
+          // fontFamily: "var(--font-ibm)",
+          fontFamily: "cursive",
         },
       },
     },
@@ -28,7 +27,8 @@ const theme = createTheme({
     MuiTextField: {
       styleOverrides: {
         root: {
-          fontFamily: "var(--font-ibm)",
+          // fontFamily: "var(--font-ibm)",
+          fontFamily: "cursive",
         },
       },
     },
@@ -36,7 +36,17 @@ const theme = createTheme({
     MuiInputBase: {
       styleOverrides: {
         root: {
-          fontFamily: "var(--font-ibm)",
+          // fontFamily: "var(--font-ibm)",
+          fontFamily: "cursive",
+        },
+      },
+    },
+
+    MuiInputLabel: {
+      styleOverrides: {
+        root: {
+          // fontFamily: "var(--font-ibm)",
+          fontFamily: "cursive",
         },
       },
     },

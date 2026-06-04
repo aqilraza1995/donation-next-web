@@ -17,11 +17,7 @@ export const metadata = {
   description: "Donation Management System",
 };
 
-export default function RootLayout({
-  children,
-}) {
-
-
+export default function RootLayout({children}) {
   return (
     <html lang="en" className={ibmPlexSans.variable}>
       <body>
@@ -29,24 +25,7 @@ export default function RootLayout({
           <LayoutWrapper>
           {children}
           </LayoutWrapper>
-          {/* <Box sx={{ backgroundColor: "#fff4ea", minHeight: "100vh" }}>
-            <Stack direction="row" alignItems="center" gap={2} mb={4}>
-
-              
-                <Box sx={{ m: "32px", maxWidth: "278px", width: "278px" }}>
-                  <Sidebar route={route} />
-                </Box>
-              <Box sx={{ width: "100%" }}>
-               <Header />
-
-                <Box sx={{ px: 2 }}>
-                  {children}
-                </Box>
-                
-              </Box>
-            </Stack>
-          </Box> */}
-        </ThemeProvider>
+          </ThemeProvider>
       </body>
     </html>
   );
