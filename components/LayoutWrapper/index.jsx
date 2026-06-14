@@ -14,7 +14,7 @@ const authRoutes = ["/login", "/sign-up", "/forgot-password", "/reset-password"]
 const route = [
   { name: "Dashboard", path: "/dashboard", icon: <DashboardCustomize sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },
   { name: "Donation", path: "/donation", icon: <Group sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },
-  { name: "User", path: "/user", icon: <Paid sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },
+  { name: "User", path: "/users", icon: <Paid sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },
 ];
 
 const LayoutWrapper = ({ children }) => {

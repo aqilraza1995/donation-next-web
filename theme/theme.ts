@@ -50,6 +50,14 @@ const theme = createTheme({
         },
       },
     },
+
+    MuiTableCell: {
+      styleOverrides: {
+        root: {
+          fontFamily: "cursive",
+        },
+      },
+    },
   },
 });
 

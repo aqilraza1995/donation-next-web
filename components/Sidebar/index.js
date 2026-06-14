@@ -1,8 +1,12 @@
+"use client"
+
 import { Stack, Box, Typography } from "@mui/material"
 import { Logout } from "@mui/icons-material"
-
+import { useRouter } from "next/navigation"
 
 const Sidebar = ({ route }) => {
+  const router = useRouter()
+
   return (
     <Box
       sx={{
@@ -40,6 +44,7 @@ const Sidebar = ({ route }) => {
                 transition: "all 0.2s ease",
                 "&:hover": { backgroundColor: "#ffb36b", },
               }}
+              onClick={() => { router.push(item?.path) }}
             >
               <Box sx={{ display: "flex", flexDirection: "column", p: 1, alignItems: "center", }}>
                 {item?.icon}
