@@ -8,13 +8,14 @@ import Header from "../Header"
 import Sidebar from "../Sidebar";
 import { Box, Stack, Drawer, useTheme, useMediaQuery } from "@mui/material";
 import { Group, Paid, DashboardCustomize } from "@mui/icons-material";
+import { ToastContainer } from "react-toastify";
 
 const authRoutes = ["/login", "/sign-up", "/forgot-password", "/reset-password"];
 
 const route = [
-  { name: "Dashboard", path: "/dashboard", icon: <DashboardCustomize sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },
-  { name: "Donation", path: "/donation", icon: <Group sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },
-  { name: "User", path: "/users", icon: <Paid sx={{ height: "22px", width: "22px", color:"#ffff" }} /> },
+  { name: "Dashboard", path: "/dashboard", icon: <DashboardCustomize sx={{ height: "22px", width: "22px", color: "#ffff" }} /> },
+  { name: "Donation", path: "/donation", icon: <Group sx={{ height: "22px", width: "22px", color: "#ffff" }} /> },
+  { name: "User", path: "/users", icon: <Paid sx={{ height: "22px", width: "22px", color: "#ffff" }} /> },
 ];
 
 const LayoutWrapper = ({ children }) => {
@@ -35,7 +36,7 @@ const LayoutWrapper = ({ children }) => {
           </Box>
         )}
 
-         {!isAuthPage && (
+        {!isAuthPage && (
           <Drawer
             anchor="left"
             open={openDrawer}
@@ -61,6 +62,20 @@ const LayoutWrapper = ({ children }) => {
 
         </Box>
       </Stack>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={3000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="colored"
+      />
+
     </Box>
   )
 }

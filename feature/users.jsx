@@ -19,15 +19,21 @@ const Users = () => {
 
   const columns = [
     { label: "Donor Name", id: "donorName" },
-    { label: "Total Donation", id: "amount" },
-    { label: "Last Donation", id: "date", stopSort: true },
-    {label:"Action", id: "action", stopSort:true, render:(elm)=> <IconButton sx={{p:"0px"}} onClick={()=> console.log("elm ===>", elm)}><Visibility sx={{color:"orange"}}/></IconButton>}
+    { label: "Last Donation", id: "last_donation", align:"center" },
+    { label: "Last Donation", id: "date", stopSort: false },
+    { label: "Total Donation", id: "amount", align:"center" },
+    {
+      label:"Action", 
+      id: "action",
+       stopSort:true, 
+       align:"center",
+       render:(elm)=> <IconButton sx={{p:"0px"}} onClick={()=> console.log("elm ===>", elm)}><Visibility sx={{color:"orange"}}/></IconButton>}
   ];
 
   const data = [
-    { donorName: "John Doe", amount: 100, date: "2024-01-01" },
-    { donorName: "Jane Smith", amount: 50, date: "2024-01-02" },
-    { donorName: "Alice Johnson", amount: 75, date: "2024-01-03" },
+    { donorName: "John Doe", amount: 1000, date: "2024-01-01",last_donation:400 },
+    { donorName: "Jane Smith", amount: 51000, date: "2024-01-02", last_donation:3000 },
+    { donorName: "Alice Johnson", amount: 7500, date: "2024-01-03", last_donation: 1200 },
   ];
 
   return (

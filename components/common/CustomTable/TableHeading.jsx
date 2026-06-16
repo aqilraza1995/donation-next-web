@@ -10,7 +10,7 @@ const TableHeading = ({ columns, orderBy, order, onRequestSort }) => {
     <TableHead >
       <TableRow sx={{ backgroundColor: '#FF8e29' }}>
         {columns?.map((column, index) => (
-          <TableCell key={index} sx={{ fontWeight: '800' }}>
+          <TableCell key={index} sx={{ fontWeight: '800' }} align={column?.align || "left"}>
             {!column?.stopSort ? (
               <TableSortLabel
                 active={orderBy === column?.id}

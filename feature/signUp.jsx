@@ -2,15 +2,22 @@
 
 import Link from "next/link";
 import * as yup from "yup";
-import { FormikProvider, useFormik } from "formik";
+import {  useFormik } from "formik";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
 import { Box, Typography, Link as MuiLink } from "@mui/material";
 
 import CustomInput from "@/components/common/CustomInput";
 import CustomButton from "@/components/common/CustomButton";
 import AuthCardContainer from "@/components/AuthContainerCard";
 import CustomSelect from "@/components/common/CustomSelect";
+import { toast } from "react-toastify";
+import { register } from "@/slice/authSlice";
 
 const SignUpForm = () => {
+  const router = useRouter();
+  const dispatch = useDispatch();
+  const { loading } = useSelector(state => state.auth)
 
   const genderOptions = [
     { label: "Male", value: "male" },
@@ -21,20 +28,28 @@ const SignUpForm = () => {
   const formik = useFormik({
     initialValues: {
       name: "",
-      phone: "",
+      mobile: "",
       gender: "",
       email: "",
       password: ""
     },
     validationSchema: yup.object({
       name: yup.string().min(2, "Name must be at least 2 characters").required("Name is required"),
-      phone: yup.string().matches(/^[0-9]{10}$/, "Invalid phone number").required("Phone number is required"),
+      mobile: yup.string().matches(/^[0-9]{10}$/, "Invalid phone number").required("Phone number is required"),
       gender: yup.string().required("Gender is required"),
       email: yup.string().email("Invalid email address").required("Email is required"),
       password: yup.string().min(6, "Password must be at least 6 characters").required("Password is required")
     }),
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: async(values) => {
+      try {
+        console.log(values);
+        const res = await dispatch(register(values)).unwrap()
+        console.log("res====> ", res)
+        toast.success(res?.message)
+        router.push("/login")
+      } catch (error) {
+        toast.error(error)
+      }
     }
   });
 
@@ -51,16 +66,15 @@ const SignUpForm = () => {
         helperText={formik?.touched?.name && formik?.errors?.name ? formik?.errors?.name : ""}
       />
       <CustomInput
-        name="phone"
-        outerLabel="Phone"
-        placeholder="Enter your phone number"
+        name="mobile"
+        outerLabel="Mobile"
+        placeholder="Enter your mobile number"
         size="small"
         fullWidth
         onChange={formik.handleChange}
-        value={formik.values.phone}
-        helperText={formik?.touched?.phone && formik?.errors?.phone ? formik?.errors?.phone : ""}
+        value={formik.values.mobile}
+        helperText={formik?.touched?.mobile && formik?.errors?.mobile ? formik?.errors?.mobile : ""}
       />
-      {console.log("genderOptions :", genderOptions)}
       <CustomSelect
         name="gender"
         outerLabel="Gender"
@@ -101,6 +115,7 @@ const SignUpForm = () => {
           label="Sign Up"
           fullWidth
           size="small"
+          loading={loading}
           onClick={formik?.handleSubmit}
         />
 

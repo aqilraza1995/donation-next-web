@@ -25,7 +25,7 @@ const TableItem = ({ columns, rows, order, orderBy }) => {
       {sortedRows?.map((row, index) => (
         <TableRow key={index}>
           {columns?.map((column, colIndex) => (
-            <TableCell key={colIndex}>
+            <TableCell key={colIndex} align={column?.align || "left"}>
               {column?.render ? column?.render(row) : row[column.id]}
             </TableCell>
           ))}
