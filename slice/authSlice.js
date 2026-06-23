@@ -24,7 +24,7 @@ export const login = createAsyncThunk("/auth/login", async (data, { rejectWithVa
   }
 })
 
-export const logout = createAsyncThunk("/auth/logout", async(_, {rejectWithValue})=>{
+export const logout = createAsyncThunk("/auth/logout", async (_, { rejectWithValue }) => {
   try {
     const response = await logoutAPI()
     return response?.data
@@ -36,7 +36,8 @@ export const logout = createAsyncThunk("/auth/logout", async(_, {rejectWithValue
 const initialState = {
   loggedUser: {},
   loading: false,
-  isAuthenticated :false,
+  isAuthenticated: false,
+  authChecked: false,
   error: null
 }
 
@@ -48,8 +49,8 @@ const authSlice = createSlice({
   extraReducers: (builder) => {
     builder
 
-    //Register
-    .addCase(register.pending, (state) => {
+      //Register
+      .addCase(register.pending, (state) => {
         state.loading = true;
         state.error = null;
       })
@@ -61,7 +62,7 @@ const authSlice = createSlice({
         state.error = action?.payload;
       })
 
-    //Login
+      //Login
       .addCase(login.pending, (state) => {
         state.loading = true;
         state.error = null;
@@ -90,6 +91,7 @@ const authSlice = createSlice({
         state.loading = false;
         state.error = action?.payload;
       })
+
   }
 })
 

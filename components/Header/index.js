@@ -22,7 +22,8 @@ const Header = ({ handleDrawerOpen }) => {
     try {
       const res = await dispatch(logout()).unwrap()
       await persistor.purge();
-      router.push("/login")
+      router.replace("/login");
+      router.refresh();
       toast.success(res?.message)
     } catch (error) {
       toast.error(error)

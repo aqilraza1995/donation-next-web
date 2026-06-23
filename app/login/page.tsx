@@ -1,9 +1,9 @@
 import LoginForm from "@/feature/login";
 
-const LoginPage = ()=>{
-    return (
-        <LoginForm />
-    )
+const LoginPage = () => {
+  return (
+    <LoginForm />
+  )
 }
 
 export default LoginPage;
