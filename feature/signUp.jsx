@@ -42,9 +42,7 @@ const SignUpForm = () => {
     }),
     onSubmit: async(values) => {
       try {
-        console.log(values);
         const res = await dispatch(register(values)).unwrap()
-        console.log("res====> ", res)
         toast.success(res?.message)
         router.push("/login")
       } catch (error) {
