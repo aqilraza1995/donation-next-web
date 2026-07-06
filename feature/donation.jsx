@@ -4,11 +4,15 @@ import { useState } from "react";
 import CustomTable from "../components/common/CustomTable";
 import { Box } from "@mui/material";
 import CustomButton from "@/components/common/CustomButton";
+import CustomDialog from "@/components/common/CustomDialog";
+import CustomInput from "@/components/common/CustomInput";
+import { CurrencyRupee } from "@mui/icons-material";
 
 const Donation = () => {
 
   const [order, setOrder] = useState('asc');
   const [orderBy, setOrderBy] = useState('');
+  const [open, setOpen] = useState(false);
 
   const handleRequestSort = (event, property) => {
     const isAsc = orderBy === property && order === 'asc';
@@ -39,7 +43,7 @@ const Donation = () => {
       }}
     >
       <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }} >
-        <CustomButton label="Donate Now" />
+        <CustomButton label="Donate Now" onClick={() => setOpen(true)} />
       </Box>
 
       <CustomTable
@@ -49,6 +53,15 @@ const Donation = () => {
         orderBy={orderBy}
         order={order}
       />
+
+      <CustomDialog
+        open={open}
+        handleClose={() => setOpen(false)}
+        title="Make a Donation"
+        submitLabel="Donate now"
+      >
+        <CustomInput label="Amount" fullWidth size="small" type="number" position="start" icon={<CurrencyRupee />} />
+        </CustomDialog>
     </Box>
   )
 }

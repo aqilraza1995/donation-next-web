@@ -7,7 +7,7 @@ import { Grid, Paper, Typography, Box } from "@mui/material";
 import DashboardCard from "../components/DashboardCard";
 import CustomSelect from "../components/common/CustomSelect";
 
-import { Area, AreaChart, Tooltip, XAxis, YAxis } from 'recharts';
+import { Area, AreaChart, Tooltip, XAxis, YAxis, Pie, PieChart } from 'recharts';
 
 const Dashboard = () => {
 
@@ -64,6 +64,12 @@ const Dashboard = () => {
     { label: 'Last 90 days', value: '90d' }
   ];
 
+  const userData = [
+    { name: 'Male', value: 2, fill: '#0088FE' },
+    { name: 'Female', value: 2, fill: '#00C49F' },
+    { name: 'Other', value: 0, fill: '#FFBB28' },
+  ];
+
   return (
     <>
       <Grid container spacing={2}>
@@ -89,11 +95,13 @@ const Dashboard = () => {
         </Grid>
       </Grid>
       <Grid container spacing={2} sx={{ mt: 2 }}>
-        <Grid item size={{ xs: 12 }}>
+
+
+        <Grid item size={{ xs: 12, md: 6 }}>
           <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py: 3, mt: 2, color: "#070707" }}>
             <Grid container sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }} alignItems="center" >
               <Box sx={{ mt: { xs: 2, sm: 0 } }}>
-                <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold'}}>
+                <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold' }}>
                   Sales Overview
                 </Typography>
               </Box>
@@ -116,9 +124,50 @@ const Dashboard = () => {
             >
               <XAxis dataKey="name" niceTicks="snap125" />
               <YAxis width="auto" niceTicks="snap125" />
-              <Tooltip />
+              <Tooltip
+               contentStyle={{
+                  // backgroundColor: '#1f2937',
+                  borderRadius: '8px',
+                  // border: 'none',
+                  // color: '#fff'
+                }}
+              />
               <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#39bc76" />
             </AreaChart>
+          </Paper>
+        </Grid>
+
+        <Grid item size={{ xs: 12, md: 6 }}>
+          <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py: 3, mt: 2, color: "#070707" }}>
+            <Box sx={{ mt: { xs: 2, sm: 0, } }}>
+              <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', mb: 2 }}>
+                Users
+              </Typography>
+            </Box>
+            <PieChart style={{ width: '100%', maxWidth: '500px', maxHeight: '47vh', aspectRatio: 1 }} responsive>
+              <Pie
+                data={userData}
+                innerRadius="80%"
+                outerRadius="100%"
+                // Corner radius is the rounded edge of each pie slice
+                cornerRadius="50%"
+                fill="#8884d8"
+                // padding angle is the gap between each pie slice
+                paddingAngle={5}
+                dataKey="value"
+                isAnimationActive={true}
+              />
+              <Tooltip
+                contentStyle={{
+                  // backgroundColor: '#1f2937',
+                  borderRadius: '8px',
+                  // border: 'none',
+                  // color: '#fff'
+                }}
+                // itemStyle={{ color: '#a7f3d0' }}
+                // cursor={{ fill: 'transparent' }}
+              />
+            </PieChart>
           </Paper>
         </Grid>
       </Grid>

@@ -15,7 +15,8 @@ const CustomInput = ({
   icon,
   fullWidth = false,
   type = "text",
-  helperText
+  helperText,
+  position = "end"
 }) => {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -39,13 +40,37 @@ const CustomInput = ({
         helperText={helperText}
         slotProps={{
           input: {
-            endAdornment: <InputAdornment position="end" sx={{ cursor: "pointer" }} onClick={() => setShowPassword(!showPassword)}>
-              {type === "password" ?
-                showPassword ?
-                  <VpnKeyOff sx={{ height: "16px", width: "16px" }} />
-                  : <VpnKey sx={{ height: "16px", width: "16px" }} />
-                : icon}
-            </InputAdornment>,
+            ...position === "start"
+              ? {
+                startAdornment: (
+                  <InputAdornment position="start">
+                    {type === "password"
+                      ? showPassword
+                        ? <VpnKeyOff sx={{ height: 16, width: 16 }} />
+                        : <VpnKey sx={{ height: 16, width: 16 }} />
+                      : icon}
+                  </InputAdornment>
+                ),
+              }
+              : {
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{ cursor: type === "password" ? "pointer" : "default" }}
+                    onClick={() => {
+                      if (type === "password") {
+                        setShowPassword(!showPassword);
+                      }
+                    }}
+                  >
+                    {type === "password"
+                      ? showPassword
+                        ? <VpnKeyOff sx={{ height: 16, width: 16 }} />
+                        : <VpnKey sx={{ height: 16, width: 16 }} />
+                      : icon}
+                  </InputAdornment>
+                ),
+              },
           },
         }}
         sx={{
