@@ -2,13 +2,15 @@
 
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
+import { useSelector } from "react-redux";
 import { usePathname } from "next/navigation";
-import Header from "../Header"
-import Sidebar from "../Sidebar";
+import { ToastContainer } from "react-toastify";
 import { Box, Stack, Drawer, useTheme, useMediaQuery } from "@mui/material";
 import { Group, Paid, DashboardCustomize } from "@mui/icons-material";
-import { ToastContainer } from "react-toastify";
+
+import Header from "../Header"
+import Sidebar from "../Sidebar";
 
 const authRoutes = ["/login", "/sign-up", "/forgot-password", "/reset-password"];
 
@@ -23,8 +25,34 @@ const LayoutWrapper = ({ children }) => {
   const isAuthPage = authRoutes.includes(pathname);
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
-
+   const { role = "" } = useSelector(state => state?.auth?.loggedUser)
+  console.log("Logged in user role in sidebar", role);
+  
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
+
+const menu = useMemo(() => {
+  const dashboard = {
+    name: "Dashboard",
+    path: "/dashboard",
+    icon: <DashboardCustomize sx={{ height: 22, width: 22, color: "#fff" }} />,
+  };
+
+  const donation = {
+    name: "Donation",
+    path: "/donation",
+    icon: <Paid sx={{ height: 22, width: 22, color: "#fff" }} />,
+  };
+
+  const users = {
+    name: "User",
+    path: "/users",
+    icon: <Group sx={{ height: 22, width: 22, color: "#fff" }} />,
+  };
+
+  return role === "admin"
+    ? [dashboard, users]
+    : [dashboard, donation];
+}, [role]);
 
   return (
     <Box sx={{ backgroundColor: "#fff4ea", minHeight: "100vh" }}>
@@ -32,7 +60,7 @@ const LayoutWrapper = ({ children }) => {
 
         {!isAuthPage && !isMobile && (
           <Box sx={{ m: "32px", maxWidth: "278px", width: "278px" }}  >
-            <Sidebar route={route} />
+            <Sidebar route={menu} />
           </Box>
         )}
 
@@ -48,7 +76,7 @@ const LayoutWrapper = ({ children }) => {
                 backgroundColor: "#fff",
               }}
             >
-              <Sidebar route={route} />
+              <Sidebar route={menu} />
             </Box>
           </Drawer>
         )}
