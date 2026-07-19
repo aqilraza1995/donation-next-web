@@ -4,18 +4,20 @@ import { persistReducer, persistStore } from "redux-persist";
 
 import authReducer from "@/slice/authSlice"
 import donationReducer from "@/slice/donationSlice"
+import dashboardReducer from "@/slice/dashboardSlice"
 
 
 const persistConfig = {
   key: "root",
   storage,
   whitelist: ["auth"],
-  blacklist: ["donation"]
+  blacklist: ["donation", "dashboard"]
 }
 
 const rootReducer = combineReducers({
   auth: authReducer,
-  donation: donationReducer
+  donation: donationReducer,
+  dashboard:dashboardReducer
 })
 
 const persistedReducer = persistReducer(persistConfig, rootReducer)

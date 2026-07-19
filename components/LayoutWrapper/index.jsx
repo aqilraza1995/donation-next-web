@@ -14,19 +14,12 @@ import Sidebar from "../Sidebar";
 
 const authRoutes = ["/login", "/sign-up", "/forgot-password", "/reset-password"];
 
-const route = [
-  { name: "Dashboard", path: "/dashboard", icon: <DashboardCustomize sx={{ height: "22px", width: "22px", color: "#ffff" }} /> },
-  { name: "Donation", path: "/donation", icon: <Group sx={{ height: "22px", width: "22px", color: "#ffff" }} /> },
-  { name: "User", path: "/users", icon: <Paid sx={{ height: "22px", width: "22px", color: "#ffff" }} /> },
-];
-
 const LayoutWrapper = ({ children }) => {
   const pathname = usePathname();
   const isAuthPage = authRoutes.includes(pathname);
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
    const { role = "" } = useSelector(state => state?.auth?.loggedUser)
-  console.log("Logged in user role in sidebar", role);
   
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 

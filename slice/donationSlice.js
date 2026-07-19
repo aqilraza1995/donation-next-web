@@ -5,8 +5,6 @@ import { createDonationAPI, getuserDonationsAPI } from "../api/donation";
 export const createDonation = createAsyncThunk("donation/createDonation", async (data, { rejectWithValue }) => {
 	try {
 		const response = await createDonationAPI({amount: data});
-		console.log("create slice response", response)
-		console.log("create Slice response?.data", response?.data)
 		return response.data;
 	} catch (error) {
 		return rejectWithValue(error.response.data);
@@ -16,8 +14,6 @@ export const createDonation = createAsyncThunk("donation/createDonation", async 
 export const getUserDonations = createAsyncThunk("donation/getUserDonations", async (_, { rejectWithValue }) => {
 	try {
 		const response = await getuserDonationsAPI();
-		console.log("create slice response", response)
-		console.log("create Slice response?.data", response?.data)
 		return response.data;
 	} catch (error) {
 		return rejectWithValue(error.response.data);

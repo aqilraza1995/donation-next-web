@@ -1,17 +1,32 @@
 "use client";
 
 
-import { useState } from "react";
-import { DashboardCustomize, Group, Paid } from "@mui/icons-material";
+import { useEffect, useMemo, useState } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { Grid, Paper, Typography, Box } from "@mui/material";
+import { DashboardCustomize, Group, Paid } from "@mui/icons-material";
+import { Area, AreaChart, Tooltip, XAxis, YAxis, Pie, PieChart, Legend } from 'recharts';
+
 import DashboardCard from "../components/DashboardCard";
 import CustomSelect from "../components/common/CustomSelect";
+import { getDashboard, getDonationChartData } from "@/slice/dashboardSlice";
+import CustomTable from "@/components/common/CustomTable";
 
-import { Area, AreaChart, Tooltip, XAxis, YAxis, Pie, PieChart } from 'recharts';
 
 const Dashboard = () => {
+  const { role = "" } = useSelector(state => state?.auth?.loggedUser)
+  const { dashboard } = useSelector(state => state?.dashboard)
+  const [selectedRange, setSelectedRange] = useState(90);
+  const dispatch = useDispatch();
 
-  const [selectedRange, setSelectedRange] = useState('7d');
+  const columns = [
+    { label: "Donor Name", id: "donorName" },
+    { label: "Amount", id: "amount" },
+    { label: "Date", id: "date", stopSort: true },
+  ];
+
+
+  const areaChartData = dashboard?.donationChartData ?? [];
 
   const data = [
     {
@@ -59,44 +74,80 @@ const Dashboard = () => {
   ];
 
   const options = [
-    { label: 'Last 7 days', value: '7d' },
-    { label: 'Last 30 days', value: '30d' },
-    { label: 'Last 90 days', value: '90d' }
+    { label: 'Last 7 days', value: 7 },
+    { label: 'Last 30 days', value: 30 },
+    { label: 'Last 90 days', value: 90 }
   ];
 
-  const userData = [
-    { name: 'Male', value: 2, fill: '#0088FE' },
-    { name: 'Female', value: 2, fill: '#00C49F' },
-    { name: 'Other', value: 0, fill: '#FFBB28' },
-  ];
+
+  const hanldeChange = async (evt) => {
+    console.log("evt.target.value ====>", evt.target.value)
+    setSelectedRange(evt.target.value)
+    const res = await dispatch(getDonationChartData(evt.target.value)).unwrap()
+    console.log("component res ===> ", res)
+  }
+
+  const pieChartData = useMemo(() => {
+    const userCount = dashboard?.userCount
+    return [
+      { name: 'Male', value: userCount?.male ?? 0, fill: '#0088FE' },
+      { name: 'Female', value: userCount?.female ?? 0, fill: '#00C49F' },
+      { name: 'Other', value: userCount?.other ?? 0, fill: '#FFBB28' },
+    ]
+  }, [dashboard])
+
+  const cards = useMemo(() => {
+    const totalUsersCard = {
+      title: "Total Users",
+      value: dashboard?.userCount?.total || 0,
+      iconBackground: "#27d095",
+      icon: <Group sx={{ height: "40px", width: "40px", color: "#fff" }} />,
+    };
+    const totalDonationsCard = {
+      title: "Total Donations",
+      value: dashboard?.totalDonationAmount || 0,
+      iconBackground: "#ff6b6b",
+      icon: <Paid sx={{ height: "40px", width: "40px", color: "#fff" }} />,
+    };
+    const notPaidUsersCard = {
+      title: "Not Paid Users",
+      value: dashboard?.zeroDonationUser || 0,
+      iconBackground: "#4ecdc4",
+      icon: <DashboardCustomize sx={{ height: "40px", width: "40px", color: "#fff" }} />,
+    };
+
+    return role === "admin" ? [totalUsersCard, totalDonationsCard, notPaidUsersCard] : [totalUsersCard, totalDonationsCard];
+  }, [role, dashboard]);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      try {
+        await dispatch(getDashboard()).unwrap();
+      } catch (error) {
+        console.error('Failed to load dashboard:', error);
+      }
+    }
+    fetchDashboard()
+  }, [])
+
 
   return (
     <>
       <Grid container spacing={2}>
-        <Grid item size={{ xs: 12, md: 6, lg: 4 }}>
-          <DashboardCard
-            iconBackground="#27d095"
-            icon={<Group sx={{ height: "40px", width: "40px", color: "#fff" }} />}
-          />
-        </Grid>
-
-        <Grid item size={{ xs: 12, md: 6, lg: 4 }}>
-          <DashboardCard
-            iconBackground="#ff6b6b"
-            icon={<Paid sx={{ height: "40px", width: "40px", color: "#fff" }} />}
-          />
-        </Grid>
-
-        <Grid item size={{ xs: 12, md: 6, lg: 4 }}>
-          <DashboardCard
-            iconBackground="#4ecdc4"
-            icon={<DashboardCustomize sx={{ height: "40px", width: "40px", color: "#fff" }} />}
-          />
-        </Grid>
+        {cards.map((card, index) => (
+          <Grid item size={{ xs: 12, md: 6, lg: role === "admin" ? 4 : 6 }}>
+            <DashboardCard
+              key={index}
+              iconBackground={card.iconBackground}
+              icon={card.icon}
+              title={card.title}
+              value={card.value}
+            />
+          </Grid>
+        ))}
       </Grid>
+
       <Grid container spacing={2} sx={{ mt: 2 }}>
-
-
         <Grid item size={{ xs: 12, md: 6 }}>
           <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py: 3, mt: 2, color: "#070707" }}>
             <Grid container sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }} alignItems="center" >
@@ -111,28 +162,36 @@ const Dashboard = () => {
                   labelKey="label"
                   valueKey="value"
                   value={selectedRange}
-                  onChange={(e) => setSelectedRange(e.target.value)}
+                  // onChange={(e) => setSelectedRange(e.target.value)}
+                  onChange={hanldeChange}
                   label="Time Range"
                 />
               </Box>
             </Grid>
             <AreaChart
-              style={{ width: '100%', maxHeight: '45vh', aspectRatio: 1.618 }}
-              responsive
-              data={data}
-              onContextMenu={(_, e) => e.preventDefault()}
+              style={{
+                width: "100%",
+                maxHeight: "45vh",
+                aspectRatio: 1.618,
+              }}
+              data={areaChartData}
             >
-              <XAxis dataKey="name" niceTicks="snap125" />
-              <YAxis width="auto" niceTicks="snap125" />
+              <XAxis dataKey="date" niceTicks="snap125" />
+
+              <YAxis />
+
               <Tooltip
-               contentStyle={{
-                  // backgroundColor: '#1f2937',
-                  borderRadius: '8px',
-                  // border: 'none',
-                  // color: '#fff'
+                contentStyle={{
+                  borderRadius: "8px",
                 }}
               />
-              <Area type="monotone" dataKey="uv" stroke="#8884d8" fill="#39bc76" />
+
+              <Area
+                type="monotone"
+                dataKey="amount"
+                stroke="#39bc76"
+                fill="#39bc76"
+              />
             </AreaChart>
           </Paper>
         </Grid>
@@ -146,33 +205,46 @@ const Dashboard = () => {
             </Box>
             <PieChart style={{ width: '100%', maxWidth: '500px', maxHeight: '47vh', aspectRatio: 1 }} responsive>
               <Pie
-                data={userData}
+                data={pieChartData}
                 innerRadius="80%"
                 outerRadius="100%"
-                // Corner radius is the rounded edge of each pie slice
                 cornerRadius="50%"
-                fill="#8884d8"
-                // padding angle is the gap between each pie slice
                 paddingAngle={5}
                 dataKey="value"
                 isAnimationActive={true}
               />
-              <Tooltip
-                contentStyle={{
-                  // backgroundColor: '#1f2937',
-                  borderRadius: '8px',
-                  // border: 'none',
-                  // color: '#fff'
+              <Tooltip contentStyle={{ borderRadius: '8px', }} />
+              <Legend
+                verticalAlign="bottom"
+                align="center"
+                iconType="circle"
+                wrapperStyle={{
+                  paddingTop: "20px",
                 }}
-                // itemStyle={{ color: '#a7f3d0' }}
-                // cursor={{ fill: 'transparent' }}
               />
             </PieChart>
           </Paper>
         </Grid>
+
+        <Grid item size={{ xs: 12 }} sx={{ mt: 2 }}>
+          <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py: 3, mt: 2, color: "#070707" }}>
+            <Box sx={{ mb: 2 }}>
+              <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', color: "black" }}>
+                Last 10 Donation
+              </Typography>
+            </Box>
+
+            <CustomTable
+              columns={columns}
+              rows={[]}
+            // onRequestSort={handleRequestSort}
+            // orderBy={orderBy}
+            // order={order}
+            />
+          </Paper>
+
+        </Grid>
       </Grid>
-
-
     </>
   )
 }
