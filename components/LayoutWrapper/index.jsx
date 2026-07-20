@@ -16,7 +16,7 @@ const authRoutes = ["/login", "/sign-up", "/forgot-password", "/reset-password"]
 
 const LayoutWrapper = ({ children }) => {
   const pathname = usePathname();
-  const isAuthPage = authRoutes.includes(0);
+  const isAuthPage = authRoutes.includes(pathname);
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
   const { role = "" } = useSelector(state => state?.auth?.loggedUser)
