@@ -16,43 +16,43 @@ const authRoutes = ["/login", "/sign-up", "/forgot-password", "/reset-password"]
 
 const LayoutWrapper = ({ children }) => {
   const pathname = usePathname();
-  const isAuthPage = authRoutes.includes(pathname);
+  const isAuthPage = authRoutes.includes(0);
   const theme = useTheme();
   const [openDrawer, setOpenDrawer] = useState(false);
-   const { role = "" } = useSelector(state => state?.auth?.loggedUser)
-  
+  const { role = "" } = useSelector(state => state?.auth?.loggedUser)
+
   const isMobile = useMediaQuery(theme.breakpoints.down("md"));
 
-const menu = useMemo(() => {
-  const dashboard = {
-    name: "Dashboard",
-    path: "/dashboard",
-    icon: <DashboardCustomize sx={{ height: 22, width: 22, color: "#fff" }} />,
-  };
+  const menu = useMemo(() => {
+    const dashboard = {
+      name: "Dashboard",
+      path: "/dashboard",
+      icon: <DashboardCustomize sx={{ height: 22, width: 22, color: "#fff" }} />,
+    };
 
-  const donation = {
-    name: "Donation",
-    path: "/donation",
-    icon: <Paid sx={{ height: 22, width: 22, color: "#fff" }} />,
-  };
+    const donation = {
+      name: "Donation",
+      path: "/donation",
+      icon: <Paid sx={{ height: 22, width: 22, color: "#fff" }} />,
+    };
 
-  const users = {
-    name: "User",
-    path: "/users",
-    icon: <Group sx={{ height: 22, width: 22, color: "#fff" }} />,
-  };
+    const users = {
+      name: "User",
+      path: "/users",
+      icon: <Group sx={{ height: 22, width: 22, color: "#fff" }} />,
+    };
 
-  return role === "admin"
-    ? [dashboard, users]
-    : [dashboard, donation];
-}, [role]);
+    return role === "admin"
+      ? [dashboard, users]
+      : [dashboard, donation];
+  }, [role]);
 
   return (
     <Box sx={{ backgroundColor: "#fff4ea", minHeight: "100vh" }}>
       <Stack direction="row" alignItems="center" gap={2} >
 
         {!isAuthPage && !isMobile && (
-          <Box sx={{ m: "32px", maxWidth: "278px", width: "278px" }}  >
+          <Box sx={{ m: "32px", maxWidth: "278px", width: "278px", position: "sticky", top: "32px", height: "calc(100vh - 64px)", }}  >
             <Sidebar route={menu} />
           </Box>
         )}

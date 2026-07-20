@@ -2,15 +2,31 @@ import { TableBody, TableCell, TableRow } from "@mui/material";
 
 const TableItem = ({ columns, rows, order, orderBy }) => {
 
+  // const descendingComparator = (a, b, orderBy) => {
+  //   if (b[orderBy] < a[orderBy]) {
+  //     return -1;
+  //   }
+  //   if (b[orderBy] > a[orderBy]) {
+  //     return 1;
+  //   }
+  //   return 0;
+  // };
+
   const descendingComparator = (a, b, orderBy) => {
-    if (b[orderBy] < a[orderBy]) {
-      return -1;
-    }
-    if (b[orderBy] > a[orderBy]) {
-      return 1;
-    }
-    return 0;
-  };
+  const column = columns.find(col => col.id === orderBy);
+
+  const aValue = column?.sortValue
+    ? column.sortValue(a)
+    : a[orderBy];
+
+  const bValue = column?.sortValue
+    ? column.sortValue(b)
+    : b[orderBy];
+
+  if (bValue < aValue) return -1;
+  if (bValue > aValue) return 1;
+  return 0;
+}
 
   const getComparator = (order, orderBy) => {
     return order === "desc"

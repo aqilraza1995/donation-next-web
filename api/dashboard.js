@@ -5,5 +5,5 @@ export const getDashboardApi = () => {
 }
 
 export const getDonationChartDataApi = (days) => {
-  return api.get("/dashboard/donation-by-date-range", days)
+  return api.get("/dashboard/donation-by-date-range", {params:{days}})
 }

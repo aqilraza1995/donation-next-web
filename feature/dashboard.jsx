@@ -1,77 +1,49 @@
 "use client";
 
 
-import { useEffect, useMemo, useState } from "react";
+import moment from "moment";
+import { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Grid, Paper, Typography, Box } from "@mui/material";
 import { DashboardCustomize, Group, Paid } from "@mui/icons-material";
-import { Area, AreaChart, Tooltip, XAxis, YAxis, Pie, PieChart, Legend } from 'recharts';
+import { Area, AreaChart, Tooltip, XAxis, YAxis, Pie, PieChart, Legend, Brush, } from 'recharts';
 
 import DashboardCard from "../components/DashboardCard";
 import CustomSelect from "../components/common/CustomSelect";
 import { getDashboard, getDonationChartData } from "@/slice/dashboardSlice";
 import CustomTable from "@/components/common/CustomTable";
+import { useFormik } from "formik";
 
 
 const Dashboard = () => {
   const { role = "" } = useSelector(state => state?.auth?.loggedUser)
   const { dashboard } = useSelector(state => state?.dashboard)
-  const [selectedRange, setSelectedRange] = useState(90);
   const dispatch = useDispatch();
 
   const columns = [
-    { label: "Donor Name", id: "donorName" },
+    { label: "Donor Name", id: "userId.name", sortValue: (row) => row?.userId?.name || "", render: (elm) => elm?.userId?.name },
     { label: "Amount", id: "amount" },
-    { label: "Date", id: "date", stopSort: true },
+    { label: "Date", id: "createdAt", render: (elm) => moment(elm?.createdAt).format("DD/MM/YYYY") },
   ];
 
+  const formik = useFormik({
+    initialValues: {
+      amount: "",
+      order: "asc",
+      orderBy: "",
+      selectedRange: 7
+    },
+  });
 
   const areaChartData = dashboard?.donationChartData ?? [];
+  const { setFieldValue } = formik
+  const { selectedRange, order, orderBy } = formik?.values;
 
-  const data = [
-    {
-      name: 'Page A',
-      uv: 4000,
-      pv: 2400,
-      amt: 2400,
-    },
-    {
-      name: 'Page B',
-      uv: 3000,
-      pv: 1398,
-      amt: 2210,
-    },
-    {
-      name: 'Page C',
-      uv: 2000,
-      pv: 9800,
-      amt: 2290,
-    },
-    {
-      name: 'Page D',
-      uv: 2780,
-      pv: 3908,
-      amt: 2000,
-    },
-    {
-      name: 'Page E',
-      uv: 1890,
-      pv: 4800,
-      amt: 2181,
-    },
-    {
-      name: 'Page F',
-      uv: 2390,
-      pv: 3800,
-      amt: 2500,
-    },
-    {
-      name: 'Page G',
-      uv: 3490,
-      pv: 4300,
-      amt: 2100,
-    },
-  ];
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setFieldValue('order', isAsc ? 'desc' : 'asc');
+    setFieldValue('orderBy', property);
+  };
 
   const options = [
     { label: 'Last 7 days', value: 7 },
@@ -81,10 +53,8 @@ const Dashboard = () => {
 
 
   const hanldeChange = async (evt) => {
-    console.log("evt.target.value ====>", evt.target.value)
-    setSelectedRange(evt.target.value)
-    const res = await dispatch(getDonationChartData(evt.target.value)).unwrap()
-    console.log("component res ===> ", res)
+    setFieldValue("selectedRange", evt.target.value)
+    await dispatch(getDonationChartData(evt.target.value)).unwrap()
   }
 
   const pieChartData = useMemo(() => {
@@ -130,7 +100,6 @@ const Dashboard = () => {
     fetchDashboard()
   }, [])
 
-
   return (
     <>
       <Grid container spacing={2}>
@@ -162,12 +131,12 @@ const Dashboard = () => {
                   labelKey="label"
                   valueKey="value"
                   value={selectedRange}
-                  // onChange={(e) => setSelectedRange(e.target.value)}
                   onChange={hanldeChange}
                   label="Time Range"
                 />
               </Box>
             </Grid>
+
             <AreaChart
               style={{
                 width: "100%",
@@ -175,22 +144,31 @@ const Dashboard = () => {
                 aspectRatio: 1.618,
               }}
               data={areaChartData}
+              responsive
             >
-              <XAxis dataKey="date" niceTicks="snap125" />
-
-              <YAxis />
-
-              <Tooltip
-                contentStyle={{
-                  borderRadius: "8px",
+              <XAxis
+                dataKey="date"
+                minTickGap={30}
+                interval={0}
+                angle={-25}
+                tickFormatter={(value) => {
+                  const [day, month] = value.split("/");
+                  return `${day}/${month}`;
                 }}
               />
-
+              <YAxis />
+              <Tooltip contentStyle={{ borderRadius: "8px" }} />
               <Area
                 type="monotone"
                 dataKey="amount"
                 stroke="#39bc76"
                 fill="#39bc76"
+              />
+              <Brush
+                dataKey="date"
+                height={30}
+                stroke="#39bc76"
+                travellerWidth={8}
               />
             </AreaChart>
           </Paper>
@@ -226,24 +204,23 @@ const Dashboard = () => {
           </Paper>
         </Grid>
 
-        <Grid item size={{ xs: 12 }} sx={{ mt: 2 }}>
-          <Paper sx={{ backgroundColor: "#fff", borderRadius: "8px", px: 2, py: 3, mt: 2, color: "#070707" }}>
+        {role === "admin" &&
+          <Grid item size={{ xs: 12 }} sx={{ my: 2 }}>
             <Box sx={{ mb: 2 }}>
-              <Typography variant="h6" component="h2" sx={{ fontWeight: 'bold', color: "black" }}>
+              <Typography variant="h6" component="h2" sx={{ color: "black" }}>
                 Last 10 Donation
               </Typography>
             </Box>
 
             <CustomTable
               columns={columns}
-              rows={[]}
-            // onRequestSort={handleRequestSort}
-            // orderBy={orderBy}
-            // order={order}
+              rows={dashboard?.lastTenDonation ?? []}
+              onRequestSort={handleRequestSort}
+              orderBy={orderBy}
+              order={order}
             />
-          </Paper>
-
-        </Grid>
+          </Grid>
+        }
       </Grid>
     </>
   )
