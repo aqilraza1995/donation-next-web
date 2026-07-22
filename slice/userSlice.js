@@ -1,11 +1,21 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-import { getUserAPI } from "../api/user";
+import { getUserAPI, getUserByIdAPI } from "../api/user";
 
 
-export const getUsers = createAsyncThunk("/user", async (_, { rejectWithValue }) => {
+export const getUsers = createAsyncThunk("/user", async (params, { rejectWithValue }) => {
   try {
-    const res = await getUserAPI()
+    const res = await getUserAPI(params)
+    return res?.data
+
+  } catch (error) {
+    return rejectWithValue(error?.response?.data)
+  }
+})
+
+export const getUserById = createAsyncThunk("/getUserById", async (id, { rejectWithValue }) => {
+  try {
+    const res = await getUserByIdAPI(id)
     return res?.data
 
   } catch (error) {
@@ -16,6 +26,7 @@ export const getUsers = createAsyncThunk("/user", async (_, { rejectWithValue })
 const initialState = {
   loading: false,
   users: [],
+  selectedUser: {},
   error: null
 }
 
@@ -33,9 +44,24 @@ const userSlice = createSlice({
       })
       .addCase(getUsers?.fulfilled, (state, action) => {
         state.loading = false
-        state.users = action?.payload?.data
+        console.log("action?.payload :", action?.payload)
+        state.users = action?.payload
       })
       .addCase(getUsers?.rejected, (state, action) => {
+        state.loading = false
+        state.error = action?.payload
+      })
+
+      //get User by id
+      .addCase(getUserById?.pending, (state) => {
+        state.loading = true
+        state.error = null
+      })
+      .addCase(getUserById?.fulfilled, (state, action) => {
+        state.loading = false
+        state.selectedUser = action?.payload
+      })
+      .addCase(getUserById?.rejected, (state, action) => {
         state.loading = false
         state.error = action?.payload
       })

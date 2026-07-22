@@ -52,7 +52,7 @@ const donationSlice = createSlice({
 			})
 			.addCase(getUserDonations.fulfilled, (state, action) => {
 				state.loading = false;
-				state.donationData = action.payload;
+				state.donationData = action.payload?.data;
 			})
 			.addCase(getUserDonations.rejected, (state, action) => {
 				state.loading = false;

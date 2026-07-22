@@ -29,6 +29,6 @@
     ".next/types/**/*.ts",
     ".next/dev/types/**/*.ts",
     "**/*.mts"
-, "feature/login.jsx", "app/layout.jsx"  ],
+, "feature/login.jsx", "app/layout.jsx", "app/users/[id]/page.jsx"  ],
   "exclude": ["node_modules"]
 }

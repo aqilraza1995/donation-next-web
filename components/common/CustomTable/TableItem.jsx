@@ -2,31 +2,21 @@ import { TableBody, TableCell, TableRow } from "@mui/material";
 
 const TableItem = ({ columns, rows, order, orderBy }) => {
 
-  // const descendingComparator = (a, b, orderBy) => {
-  //   if (b[orderBy] < a[orderBy]) {
-  //     return -1;
-  //   }
-  //   if (b[orderBy] > a[orderBy]) {
-  //     return 1;
-  //   }
-  //   return 0;
-  // };
-
   const descendingComparator = (a, b, orderBy) => {
-  const column = columns.find(col => col.id === orderBy);
+    const column = columns.find(col => col.id === orderBy);
 
-  const aValue = column?.sortValue
-    ? column.sortValue(a)
-    : a[orderBy];
+    const aValue = column?.sortValue
+      ? column.sortValue(a)
+      : a[orderBy];
 
-  const bValue = column?.sortValue
-    ? column.sortValue(b)
-    : b[orderBy];
+    const bValue = column?.sortValue
+      ? column.sortValue(b)
+      : b[orderBy];
 
-  if (bValue < aValue) return -1;
-  if (bValue > aValue) return 1;
-  return 0;
-}
+    if (bValue < aValue) return -1;
+    if (bValue > aValue) return 1;
+    return 0;
+  }
 
   const getComparator = (order, orderBy) => {
     return order === "desc"
@@ -38,7 +28,7 @@ const TableItem = ({ columns, rows, order, orderBy }) => {
 
   return (
     <TableBody>
-      {sortedRows?.map((row, index) => (
+      {sortedRows?.length ? sortedRows?.map((row, index) => (
         <TableRow key={index}>
           {columns?.map((column, colIndex) => (
             <TableCell key={colIndex} align={column?.align || "left"}>
@@ -46,7 +36,11 @@ const TableItem = ({ columns, rows, order, orderBy }) => {
             </TableCell>
           ))}
         </TableRow>
-      ))}
+      )) :
+        <TableRow>
+          <TableCell colSpan={columns?.length} align="center">No Record Found</TableCell>
+        </TableRow>
+      }
     </TableBody>
   )
 }

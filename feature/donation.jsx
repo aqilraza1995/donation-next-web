@@ -1,13 +1,14 @@
 "use client"
 
 import * as yup from "yup";
+import moment from "moment";
 import { useEffect } from "react";
-import {useRouter} from "next/navigation";
 import { useFormik } from "formik";
-import { Box } from "@mui/material";
 import { toast } from "react-toastify";
-import { CurrencyRupee } from "@mui/icons-material";
-import {useDispatch, useSelector} from "react-redux";
+import { useRouter } from "next/navigation";
+import { useDispatch, useSelector } from "react-redux";
+import { CurrencyRupee, Search } from "@mui/icons-material";
+import { Box, Grid, useMediaQuery, useTheme } from "@mui/material";
 
 import CustomTable from "../components/common/CustomTable";
 import CustomButton from "@/components/common/CustomButton";
@@ -19,11 +20,13 @@ const Donation = () => {
 
   const dispatch = useDispatch();
   const router = useRouter();
-  const {donationData, loading} = useSelector(state => state.donation);
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down("sm"))
+  const { donationData, loading } = useSelector(state => state.donation);
+
   const columns = [
-    { label: "Donor Name", id: "donorName" },
+    { label: "Date", id: "createdAt", render: (elm) => moment(elm?.createdAt).format("DD/MM/YYYY") },
     { label: "Amount", id: "amount" },
-    { label: "Date", id: "date", stopSort: true },
   ];
 
   const formik = useFormik({
@@ -36,17 +39,15 @@ const Donation = () => {
     validationSchema: yup.object({
       amount: yup.number().required("Amount is required").positive("Amount must be positive").max(10000, "Amount cannot exceed 10,000"),
     }),
-    onSubmit: async(values) => {
+    onSubmit: async (values) => {
       try {
-          console.log("Donation submitted", values.amount);
-      formik?.setFieldValue('open', false);
+        formik?.setFieldValue('open', false);
 
-      const res = await dispatch(createDonation(values.amount)).unwrap();
-        console.log("Donation response URL", res);
-       if (res?.url) {
-  window.location.href = res.url; // Isko lagaiye
-}
-      toast.success(res?.message || "Donation successful!");
+        const res = await dispatch(createDonation(values.amount)).unwrap();
+        if (res?.url) {
+          window.location.href = res.url; // Isko lagaiye
+        }
+        toast.success(res?.message || "Donation successful!");
       } catch (error) {
         toast.error(error?.message || "An error occurred while processing the donation.");
       }
@@ -59,18 +60,10 @@ const Donation = () => {
     formik?.setFieldValue('orderBy', property);
   };
 
-
-  const data = [
-    { donorName: "John Doe", amount: 100, date: "2024-01-01" },
-    { donorName: "Jane Smith", amount: 50, date: "2024-01-02" },
-    { donorName: "Alice Johnson", amount: 75, date: "2024-01-03" },
-  ];
-
   useEffect(() => {
     const fetchDonations = async () => {
       try {
-        const res = await dispatch(getUserDonations()).unwrap();
-        console.log("Fetched donations", res);
+        await dispatch(getUserDonations()).unwrap();
       } catch (error) {
         toast.error(error?.message || "An error occurred while fetching donations.");
       }
@@ -79,9 +72,7 @@ const Donation = () => {
     fetchDonations();
   }, [dispatch]);
 
-  console.log("Donation component state", { donationData, loading, formikValues: formik.values });
-
-  const {amount, order, orderBy, open} = formik?.values;
+  const { amount, order, orderBy, open } = formik?.values;
 
   return (
     <Box
@@ -93,13 +84,27 @@ const Donation = () => {
         gap: 3,
       }}
     >
-      <Box sx={{ display: "flex", justifyContent: "flex-end", width: "100%" }} >
-        <CustomButton label="Donate Now" onClick={() => formik?.setFieldValue('open', true)} />
-      </Box>
+      <Grid container sx={{ width: "100%" }}>
+        <Grid size={{ xs: 12, sm: 6 }}>
+          <CustomButton
+            label="Donate Now"
+            onClick={() => formik?.setFieldValue('open', true)}
+            fullWidth={isMobile ? true : false}
+          />
+        </Grid>
+        <Grid size={{ xs: 12, sm: 6 }} sx={{ display: "flex", justifyContent: isMobile ? "start" : "end", mt: isMobile ? 2 : 0 }}>
+          <CustomInput
+            placeholder={"Search..."}
+            icon={<Search />}
+            position="start"
+            fullWidth={isMobile ? true : false}
+          />
+        </Grid>
+      </Grid>
 
       <CustomTable
         columns={columns}
-        rows={data}
+        rows={donationData}
         onRequestSort={handleRequestSort}
         orderBy={orderBy}
         order={order}
@@ -107,13 +112,13 @@ const Donation = () => {
 
       <CustomDialog
         open={open}
-        handleClose={()=> formik.resetForm()}
+        handleClose={() => formik.resetForm()}
         title="Make a Donation"
         submitLabel="Donate now"
         handleSubmit={formik?.handleSubmit}
       >
         <CustomInput
-          label="Amount"
+          placeholder={"Amount"}
           fullWidth
           size="small"
           type="number"

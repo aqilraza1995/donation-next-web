@@ -6,5 +6,5 @@ export const createDonationAPI = (data) => {
 }
 
 export const getuserDonationsAPI = () => {
-  return api?.get("/donation/my-donations")
+  return api?.get("/donation")
 }

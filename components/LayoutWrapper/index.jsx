@@ -49,10 +49,14 @@ const LayoutWrapper = ({ children }) => {
 
   return (
     <Box sx={{ backgroundColor: "#fff4ea", minHeight: "100vh" }}>
-      <Stack direction="row" alignItems="center" gap={2} >
+      <Stack
+        direction="row"
+        gap={2}
+        sx={{ width: "100%", alignItems: "flex-start" }}
+      >
 
         {!isAuthPage && !isMobile && (
-          <Box sx={{ m: "32px", maxWidth: "278px", width: "278px", position: "sticky", top: "32px", height: "calc(100vh - 64px)", }}  >
+          <Box sx={{ m: "32px", maxWidth: "278px", width: "278px", position: "sticky", top: "32px", height: "calc(100vh - 64px)" }}>
             <Sidebar route={menu} />
           </Box>
         )}
@@ -63,12 +67,7 @@ const LayoutWrapper = ({ children }) => {
             open={openDrawer}
             onClose={() => setOpenDrawer(false)}
           >
-            <Box
-              sx={{
-                width: 280,
-                backgroundColor: "#fff",
-              }}
-            >
+            <Box sx={{ width: 280, backgroundColor: "#fff" }}>
               <Sidebar route={menu} />
             </Box>
           </Drawer>
@@ -76,11 +75,9 @@ const LayoutWrapper = ({ children }) => {
 
         <Box sx={{ width: "100%" }}>
           {isAuthPage ? null : <Header handleDrawerOpen={() => setOpenDrawer(true)} />}
-
           <Box sx={{ px: 2 }}>
             {children}
           </Box>
-
         </Box>
       </Stack>
 
